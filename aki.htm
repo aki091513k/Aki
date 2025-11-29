@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JHONDEL R. BANAGA</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:"Poppins", sans-serif; }
+  body { overflow:hidden; height:100vh; background:black; display:flex; justify-content:center; align-items:center; }
+
+  video.background-video { position:fixed; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-3; display:none; }
+  audio { display:none; }
+  .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(180,200,255,0.15); backdrop-filter:blur(8px); z-index:-2; display:none; }
+
+  .profile-card { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    background:rgba(200,220,255,0.25); border:1px solid rgba(255,255,255,0.3); border-radius:20px; padding:40px; width:330px; text-align:center; color:#fff;
+    box-shadow:0 0 25px rgba(173,216,255,0.5); opacity:0; transition:opacity 1s ease-in; }
+
+  .profile-pic { width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid rgba(255,255,255,0.7); margin-bottom:15px; }
+
+  h1 { font-size:2em; font-weight:800; color:#9be2ff;
+    text-shadow:0 0 5px #00eaff,0 0 10px #00eaff,0 0 20px #ff66c4,0 0 40px #ff66c4;
+    -webkit-text-stroke:1px rgba(255,255,255,0.4); position:relative; animation:glow 2s infinite ease-in-out alternate; display:inline-block; }
+  @keyframes glow { from { text-shadow:0 0 10px #00eaff,0 0 20px #ff66c4; } to { text-shadow:0 0 20px #00eaff,0 0 40px #ff66c4; } }
+
+  .sparkle { position:absolute; width:5px; height:5px; background:pink; border-radius:50%; box-shadow:0 0 10px #ff9de7; animation:sparkleTwinkle 2s infinite ease-in-out; }
+  @keyframes sparkleTwinkle { 0%,100%{opacity:0.3;transform:scale(1);} 50%{opacity:1;transform:scale(1.8);} }
+
+  h2 { font-size:1.2em; font-weight:700; color:#d1d8ff; text-shadow:0 0 10px #a3bfff; -webkit-text-stroke:0.5px rgba(255,255,255,0.3); margin-bottom:20px; }
+
+  .buttons { display:flex; flex-direction:column; gap:10px; }
+  button { background:rgba(180,200,255,0.2); border:1px solid rgba(255,255,255,0.3); border-radius:10px; padding:10px; font-size:1em; color:#fff; cursor:pointer; transition:0.3s; }
+  button:hover { background:rgba(255,255,255,0.25); box-shadow:0 0 15px rgba(150,200,255,0.6); transform:scale(1.05); }
+
+  .modal { display:none; position:fixed; z-index:10; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); }
+  .modal-content { background:rgba(230,240,255,0.15); backdrop-filter:blur(12px); border-radius:20px; margin:10% auto; padding:20px; width:80%; max-width:400px; color:#fff; box-shadow:0 0 20px rgba(173,216,255,0.5); animation:fadeScale 0.4s ease; }
+  @keyframes fadeScale { from{opacity:0; transform:scale(0.8);} to{opacity:1; transform:scale(1);} }
+  .close { color:#fff; float:right; font-size:1.5em; cursor:pointer; }
+
+  .contact-icons { margin-top:15px; display:flex; justify-content:center; gap:20px; }
+  .contact-icons img { width:40px; height:40px; cursor:pointer; transition:0.3s; }
+  .contact-icons img:hover { transform:scale(1.2); filter:drop-shadow(0 0 8px #a3bfff); }
+
+  .enter-screen { position:absolute; z-index:20; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; width:100vw; background:linear-gradient(135deg,#c8e1ff,#d7bfff); text-align:center; }
+  .enter-btn { background:linear-gradient(90deg,#9be2ff,#a38bff); border:none; border-radius:30px; padding:15px 40px; font-size:1.2em; color:white; cursor:pointer; transition:0.3s; }
+  .enter-btn:hover { transform:scale(1.05); box-shadow:0 0 25px rgba(180,220,255,0.9); }
+
+  .snowflake { position:fixed; top:0; color:white; font-size:1em; animation:fall linear infinite; opacity:0.8; pointer-events:none; z-index:9999; }
+  @keyframes fall { 0%{transform:translateY(-10px); opacity:1;} 100%{transform:translateY(110vh);opacity:0;} }
+</style>
+</head>
+<body>
+
+<video id="bg-video" class="background-video" loop muted playsinline>
+  <source src="SnapTik-dot-Kim-bb30be886384c6c16789ca842ce219a6.mp4" type="video/mp4">
+</video>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="enter-screen" id="enter-screen">
+  <h1>Welcome</h1>
+  <button class="enter-btn" onclick="enterSite()">Enter</button>
+</div>
+
+<div class="profile-card" id="profile-card">
+  <img src="FB_IMG_1763633939054.jpg" alt="Profile Picture" class="profile-pic">
+  <h1 id="name">JHONDEL R. BANAGA</h1>
+  <h2>BSIS 1</h2>
+
+  <div class="buttons">
+    <button onclick="openModal('personalInfo')">Personal Information</button>
+    <button onclick="openModal('skills')">Skills</button>
+    <button onclick="openModal('hobby')">Hobby</button>
+    <button onclick="openModal('contactInfo')">Contact Info</button>
+  </div>
+
+  <div class="contact-icons">
+    <a href="https://www.instagram.com/itsaki.07" target="_blank">
+      <img src="instagram.png" alt="Instagram">
+    </a>
+    <a href="https://www.facebook.com/share/14TYD498CvT/" target="_blank">
+      <img src="facebook.png" alt="Facebook">
+    </a>
+  </div>
+</div>
+
+<!-- Modals -->
+
+<div id="personalInfo" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('personalInfo')">&times;</span>
+    <h3>Personal Information</h3>
+    <p>Student ID: 25-1239</p>
+    <p>Year: 1st Year</p>
+    <p>Address: Daramuangan Norte, San Mateo, Isabela</p>
+  </div>
+</div>
+
+<div id="skills" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('skills')">&times;</span>
+    <h3>Skills</h3>
+    <ul>
+      <li>Critical Thinking</li>
+      <li>Problem Solving</li>
+      <li>Creativity</li>
+      <li>Planning</li>
+      <li>Teamwork</li>
+      <li>Adaptability</li>
+      <li>Basic Coding</li>
+      <li>Sports (Badminton, Chess)</li>
+    </ul>
+  </div>
+</div>
+
+<div id="hobby" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('hobby')">&times;</span>
+    <h3>Hobbies</h3>
+    <ul>
+      <li>Reading manga/manhwa</li>
+      <li>Watching anime/movies</li>
+      <li>Playing online games</li>
+      <li>Playing badminton</li>
+      <li>Programming</li>
+    </ul>
+  </div>
+</div>
+
+<div id="contactInfo" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('contactInfo')">&times;</span>
+    <h3>Contact Info</h3>
+    <p>📞 +63 09311522693</p>
+    <p>✉️ aaki071207@gmail.com</p>
+  </div>
+</div>
+
+<script>
+function enterSite() {
+  document.getElementById("enter-screen").style.display="none";
+  document.getElementById("bg-video").style.display="block";
+  document.getElementById("overlay").style.display="block";
+  document.getElementById("bg-video").play();
+
+  const card=document.getElementById("profile-card");
+  setTimeout(()=>{card.style.opacity=1;},500);
+
+  // Snowflakes
+  const snowCount=40;
+  for(let i=0;i<snowCount;i++){
+    const snow=document.createElement('div');
+    snow.classList.add('snowflake');
+    snow.textContent='❄';
+    snow.style.left=Math.random()*100+'vw';
+    snow.style.animationDuration=(3+Math.random()*5)+'s';
+    snow.style.fontSize=(10+Math.random()*10)+'px';
+    document.body.appendChild(snow);
+  }
+
+  // Sparkles
+  const name=document.getElementById('name');
+  name.style.position="relative";
+  const nameWidth=name.offsetWidth;
+  const nameHeight=name.offsetHeight;
+
+  for(let i=0;i<25;i++){
+    const sparkle=document.createElement('div');
+    sparkle.classList.add('sparkle');
+    sparkle.style.top=Math.random()*nameHeight+'px';
+    sparkle.style.left=Math.random()*nameWidth+'px';
+    sparkle.style.animationDelay=Math.random()*2+'s';
+    name.appendChild(sparkle);
+  }
+}
+
+function openModal(id){document.getElementById(id).style.display="block";}
+function closeModal(id){document.getElementById(id).style.display="none";}
+window.onclick=function(event){
+  document.querySelectorAll(".modal").forEach(modal=>{
+    if(event.target==modal) modal.style.display="none";
+  });
+};
+</script>
+
+</body>
+</html>
